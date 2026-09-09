@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XO Game</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#4f46e5,#7c3aed,#2563eb);
+}
+
+.container{
+    width:100%;
+    max-width:500px;
+    padding:20px;
+}
+
+.title{
+    width:100%;
+    text-align:center;
+    font-size:38px;
+    font-weight:bold;
+    color:white;
+    background:rgba(255,255,255,.12);
+    backdrop-filter:blur(8px);
+    padding:18px;
+    border-radius:18px;
+    margin-bottom:30px;
+    box-shadow:0 15px 35px rgba(0,0,0,.25);
+    letter-spacing:2px;
+}
+
+.title span{
+    color:#00e5ff;
+}
+
+.board{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.box{
+    aspect-ratio:1;
+    background:rgba(255,255,255,.12);
+    border:2px solid rgba(255,255,255,.25);
+    border-radius:18px;
+    cursor:pointer;
+    transition:.3s;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:60px;
+    font-weight:bold;
+    color:white;
+    backdrop-filter:blur(10px);
+}
+
+.box:hover{
+    transform:translateY(-5px) scale(1.03);
+    background:rgba(255,255,255,.22);
+    box-shadow:0 10px 25px rgba(0,0,0,.3);
+}
+
+@media(max-width:550px){
+
+    .container{
+        padding:15px;
+    }
+
+    .title{
+        font-size:30px;
+        padding:15px;
+    }
+
+    .box{
+        font-size:45px;
+        border-radius:15px;
+    }
+
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+    <div class="title">
+        <span>XO</span> Game
+    </div>
+
+    <div class="board">
+
+        <div class="box" id="item1" onclick="game(this.id)"></div>
+        <div class="box" id="item2" onclick="game(this.id)"></div>
+        <div class="box" id="item3" onclick="game(this.id)"></div>
+
+        <div class="box" id="item4" onclick="game(this.id)"></div>
+        <div class="box" id="item5" onclick="game(this.id)"></div>
+        <div class="box" id="item6" onclick="game(this.id)"></div>
+
+        <div class="box" id="item7" onclick="game(this.id)"></div>
+        <div class="box" id="item8" onclick="game(this.id)"></div>
+        <div class="box" id="item9" onclick="game(this.id)"></div>
+
+    </div>
+
+</div>
+<script>
+    let title=document.querySelector('.title');
+    let turn='x';
+    let gameOver = false;
+    let squares=[];
+
+    function gain(num1,num2,num3){
+        gameOver = true;
+           title.innerHTML=`${squares[num1]} winner`;
+            document.getElementById('item'+num1).style.background="#00E5FF";
+            document.getElementById('item'+num2).style.background="#00E5FF";
+            document.getElementById('item'+num3).style.background="#00E5FF";
+
+            setInterval(function(){title.innerHTML+='.'},1000);
+            setTimeout(function(){location.reload()},4000);
+
+
+    }
+
+    function winner(){
+       
+        for (let i=1; i<10;i++){
+         squares[i] = document.getElementById('item'+i).innerHTML;
+        }
+        if (squares[1]==squares[2] && squares[2]==squares[3] && squares[1] != ''){
+         
+            gain(1,2,3);
+
+
+        }
+        else if(squares[4]==squares[5]&&squares[5]==squares[6]&&squares[5]!=''){
+               gain(4,5,6);
+        }
+        else if (squares[7]==squares[8]&&squares[8]==squares[9]&&squares[8]!=''){
+                   gain(7,8,9);
+        }
+        else if (squares[1]==squares[4]&&squares[4]==squares[7]&&squares[1]!=''){
+               gain(1,4,7);
+        }
+        else if (squares[2]==squares[5]&&squares[5]==squares[8]&&squares[5]!=''){
+                   gain(2,5,8);
+        }
+        else if (squares[3]==squares[6]&&squares[6]==squares[9]&&squares[6]!=''){
+                   gain(3,6,9);
+        }
+        else if (squares[1]==squares[5]&&squares[5]==squares[9]&&squares[5]!=''){
+                   gain(1,5,9);
+        }
+        if (squares[3]==squares[5]&&squares[5]==squares[7]&&squares[5]!=''){
+                   gain(3,5,7);
+        }
+
+    }
+
+    function game(id){
+        if (gameOver) return;
+        let element=document.getElementById(id);
+        if (turn=='x' && element.innerHTML=='' ){
+            element.innerHTML='X';
+            turn='o';
+            title.innerHTML='O'
+
+
+        }
+        else if(turn=='o' && element.innerHTML==''){
+             element.innerHTML='O';
+             turn='x';
+              title.innerHTML='X'
+
+        }
+        winner();
+
+
+    }
+</script>
+
+</body>
+</html>
